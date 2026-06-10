@@ -1,11 +1,9 @@
-import { NextResponse } from 'next/server'
+export const dynamic = 'force-static'
 
-export async function GET(request: Request) {
-  const url = new URL(request.url)
-  const code = url.searchParams.get('code')
-  const next = url.searchParams.get('next') || '/today'
-  if (code) {
-    return NextResponse.redirect(new URL(`/auth/confirm?code=${code}&next=${next}`, request.url))
-  }
-  return NextResponse.redirect(new URL('/auth', request.url))
+export async function GET() {
+  // Static redirect — actual code exchange handled client-side in /auth/confirm
+  return new Response(null, {
+    status: 302,
+    headers: { Location: '/auth/confirm/' },
+  })
 }
