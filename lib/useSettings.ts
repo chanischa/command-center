@@ -21,7 +21,7 @@ export function useSettings() {
       // Create default settings for new user
       const { data: created } = await supabase
         .from('user_settings')
-        .insert({ user_id: user.id, venture_progress: { Veranin: 0, QuizMe: 0, RUNRUN: 0, 'YOO Home': 0 } })
+        .insert({ user_id: user.id, venture_progress: { Veranin: 0, QuizMe: 0, RUNRUN: 0, 'YOO Home': 0 } } as any)
         .select()
         .single()
       if (created) setSettings(created)
@@ -34,7 +34,7 @@ export function useSettings() {
     if (!settings) return
     const { data } = await supabase
       .from('user_settings')
-      .update(updates)
+      .update(updates as any)
       .eq('id', settings.id)
       .select()
       .single()

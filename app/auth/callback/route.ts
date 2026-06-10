@@ -1,12 +1,11 @@
-import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
+  const next = url.searchParams.get('next') || '/today'
   if (code) {
-    const supabase = createServerSupabaseClient()
-    await supabase.auth.exchangeCodeForSession(code)
+    return NextResponse.redirect(new URL(`/auth/confirm?code=${code}&next=${next}`, request.url))
   }
-  return NextResponse.redirect(new URL('/today', request.url))
+  return NextResponse.redirect(new URL('/auth', request.url))
 }

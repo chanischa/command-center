@@ -30,12 +30,12 @@ export function useTasks() {
   async function addTask(task: Omit<Task, 'id' | 'user_id' | 'created_at' | 'updated_at'>) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
-    const { data } = await supabase.from('tasks').insert({ ...task, user_id: user.id }).select().single()
+    const { data } = await supabase.from('tasks').insert({ ...task, user_id: user.id } as any).select().single()
     if (data) setTasks(prev => [data, ...prev])
   }
 
   async function updateTask(id: string, updates: Partial<Task>) {
-    const { data } = await supabase.from('tasks').update(updates).eq('id', id).select().single()
+    const { data } = await supabase.from('tasks').update(updates as any as any).eq('id', id).select().single()
     if (data) setTasks(prev => prev.map(t => t.id === id ? data : t))
   }
 

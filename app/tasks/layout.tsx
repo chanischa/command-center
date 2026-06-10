@@ -1,10 +1,16 @@
-import { redirect } from 'next/navigation'
-import { createServerSupabaseClient } from '@/lib/supabase-server'
+'use client'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase'
 import AppShell from '@/components/AppShell'
 
-export default async function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
-  const supabase = createServerSupabaseClient()
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) redirect('/auth')
+export default function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
+  const supabase = createClient()
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) router.replace('/auth')
+    })
+  }, [])
   return <AppShell>{children}</AppShell>
 }

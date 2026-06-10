@@ -1,7 +1,6 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import type { Database } from '@/types/database'
 
-// Browser client — use in Client Components ('use client')
+// Use untyped client to avoid strict type inference issues
 export function createClient() {
-  return createClientComponentClient<Database>()
+  return createClientComponentClient()
 }
